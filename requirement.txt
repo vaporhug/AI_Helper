@@ -1,0 +1,6 @@
+Flask
+Flask-Security
+Flask-RESTful
+Flask-JWT-Extended
+Flask-SQLAlchemy
+redis
