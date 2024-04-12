@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import RoleMixin, UserMixin
-from datetime import datetime
+
+from sqlalchemy import JSON
 
 db = SQLAlchemy()
 
@@ -22,6 +23,8 @@ class User(db.Model, UserMixin):
     age = db.Column(db.Integer)
     role = db.Column(db.String(20))
     password = db.Column(db.String(255))
+    conversation_histories = db.relationship('ConversationHistory', backref='user',
+                                lazy='dynamic')
 
 # 题目表
 class Question(db.Model):
@@ -39,21 +42,9 @@ class UserQuestion(db.Model):
     user = db.relationship('User', backref=db.backref('user_questions', lazy='dynamic'))
     question = db.relationship('Question', backref=db.backref('user_questions', lazy='dynamic'))
 
-# class User(db.Model, UserMixin):
-#     id = db.Column(db.Integer, primary_key=True)
-#     username = db.Column(db.String(100), unique=True)
-#     email = db.Column(db.String(255), unique=True)
-#     password = db.Column(db.String(255))
-#     active = db.Column(db.Boolean())
-#     fs_uniquifier = db.Column(db.String(64), unique=True)  # For Flask-Security
-#     gender = db.Column(db.String(10))  # Assuming 'male', 'female', 'other'
-#     age = db.Column(db.Integer)
-#     status = db.Column(db.String(50))  # 'college_student', 'high_school_student', 'employed'
-#     questions = db.relationship('Question', backref='user', lazy='dynamic')
-#
-# class Question(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-#     category = db.Column(db.String(100))
-#     content = db.Column(db.Text)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+class ConversationHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
+    title = db.Column(db.String(120), nullable=False)
+    last_modified = db.Column(db.DateTime, nullable=False)
+    content = db.Column(JSON, nullable=False)
