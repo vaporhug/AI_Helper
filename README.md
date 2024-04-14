@@ -3,6 +3,9 @@
 # AI_Helper
 
 AI_Helper 是一个使用 Python 编写的项目，主要用于处理和生成对话、问题、笔记等。
+其前端的代码仓库为
+(https://github.com/LouisLou2/LawExamPal/blob/master/README_EN.md)
+
 
 ## 运行项目
 
